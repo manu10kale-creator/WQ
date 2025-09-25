@@ -38,22 +38,22 @@ def train_models():
     results.append(("Baseline", X_train.shape[1], f1_score(y_test, y_pred_dummy, average="macro")))
 
     # Decision Tree
-    dt_params = {"max_depth": [3,5,8, None], "min_samples_leaf":[1,2,4]}
-    dt = GridSearchCV(DecisionTreeClassifier(random_state=42), dt_params, cv=5, scoring="f1_macro", n_jobs=-1)
+    dt_params = {"max_depth": [3,5], "min_samples_leaf":[1,2]}
+    dt = GridSearchCV(DecisionTreeClassifier(random_state=42), dt_params, cv=3, scoring="f1_macro", n_jobs=1)
     dt.fit(X_train, y_train)
     y_pred_dt = dt.predict(X_test)
     results.append(("Decision Tree", X_train.shape[1], f1_score(y_test, y_pred_dt, average="macro")))
 
     # Random Forest
-    rf_params = {"n_estimators":[100,200], "max_depth":[None,10,20], "min_samples_leaf":[1,2]}
-    rf = GridSearchCV(RandomForestClassifier(random_state=42, n_jobs=-1), rf_params, cv=5, scoring="f1_macro", n_jobs=-1)
+    rf_params = {"n_estimators":[100], "max_depth":[None,10], "min_samples_leaf":[1]}
+    rf = GridSearchCV(RandomForestClassifier(random_state=42, n_jobs=1), rf_params, cv=3, scoring="f1_macro", n_jobs=1)
     rf.fit(X_train, y_train)
     y_pred_rf = rf.predict(X_test)
     results.append(("Random Forest", X_train.shape[1], f1_score(y_test, y_pred_rf, average="macro")))
 
     # Gradient Boosting
-    gb_params = {"n_estimators":[100,200], "learning_rate":[0.01,0.1], "max_depth":[3,5]}
-    gb = GridSearchCV(GradientBoostingClassifier(random_state=42), gb_params, cv=5, scoring="f1_macro", n_jobs=-1)
+    gb_params = {"n_estimators":[100], "learning_rate":[0.1], "max_depth":[3]}
+    gb = GridSearchCV(GradientBoostingClassifier(random_state=42), gb_params, cv=3, scoring="f1_macro", n_jobs=1)
     gb.fit(X_train, y_train)
     y_pred_gb = gb.predict(X_test)
     results.append(("Gradient Boosting", X_train.shape[1], f1_score(y_test, y_pred_gb, average="macro")))
@@ -85,3 +85,4 @@ st.title("⚙️ Train Models")
 if st.button("🚀 Run Training"):
     train_models()
     st.success("✅ Training complete! Go back to '🏆 Model ranking' to compare results.")
+
